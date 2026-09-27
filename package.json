@@ -1,7 +1,7 @@
 {
-  "name": "node-typescript-boilerplate",
+  "name": "Customer App API",
   "version": "1.0.0",
-  "description": "Boilerplate para projetos Node.js com TypeScript",
+  "description": "API para a aplicação de gerenciamento de clientes",
   "main": "index.js",
   "scripts": {
     "dist": "ts down src",

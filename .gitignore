@@ -1,4 +1,4 @@
 node_modules/
+.docs/
 
-# Decomentar quando criar um projeto
-# .env
+.env
