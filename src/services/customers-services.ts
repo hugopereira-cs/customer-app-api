@@ -4,14 +4,20 @@ import * as CustomerRepository from "../repositories/customers-repository";
 import * as HttpResponse from "../utils/http-helper";
 
 export const getCustomersService = async () => {
-  return { customer: "customer2" };
+  const result = await CustomerRepository.findAllCustomers();
+  
+  return result;
 };
 
-export const createCustomerById = async (
+export const createCustomer = async (
   customer: Prisma.CustomerCreateInput
 ) => {
   if (!customer.name || !customer.email) {
     return HttpResponse.badRequest(HttpResponse.Messages.INVALID_CUSTOMER);
+  }
+
+  if (!customer.status) {
+    customer.status = true;
   }
   const result = await CustomerRepository.insertCustomer(customer);
 

@@ -10,7 +10,7 @@ export const getCustomers = async (req: Request, res: Response) => {
 
 export const postCustomer = async (req: Request, res: Response) => {
   const bodyValue = req.body;
-  const httpResponse = await Service.createCustomerById(bodyValue);
+  const httpResponse = await Service.createCustomer(bodyValue);
 
   return res.status(HttpStatus.OK).json(httpResponse)
 };
