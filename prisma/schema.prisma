@@ -12,4 +12,6 @@ model Customer {
   name  String
   email String
   status Boolean
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt()
 }
