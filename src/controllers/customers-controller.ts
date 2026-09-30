@@ -8,9 +8,19 @@ export const getCustomers = async (req: Request, res: Response) => {
   res.status(HttpStatus.OK).json(httpResponse);
 };
 
+export const getCustomerById = async (
+  req: Request<{ id: string }>,
+  res: Response
+) => {
+  const id = req.params.id;
+  const httpResponse = await Service.getCustomerByIdService(id);
+
+  res.status(httpResponse.statusCode).json(httpResponse.body);
+};
+
 export const postCustomer = async (req: Request, res: Response) => {
   const bodyValue = req.body;
   const httpResponse = await Service.createCustomer(bodyValue);
 
-  return res.status(HttpStatus.OK).json(httpResponse)
+  return res.status(HttpStatus.OK).json(httpResponse);
 };

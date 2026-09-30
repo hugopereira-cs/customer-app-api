@@ -5,13 +5,25 @@ import * as HttpResponse from "../utils/http-helper";
 
 export const getCustomersService = async () => {
   const result = await CustomerRepository.findAllCustomers();
-  
+
   return result;
 };
 
-export const createCustomer = async (
-  customer: Prisma.CustomerCreateInput
-) => {
+export const getCustomerByIdService = async (id: string) => {
+  if (!/^[0-9a-fA-F]{24}$/.test(id)) {
+    return HttpResponse.badRequest(HttpResponse.Messages.INVALID_ID);
+  }
+
+  const data = await CustomerRepository.findCustomerById(id);
+
+  if (!data) {
+    return HttpResponse.notFound(HttpResponse.Messages.CUSTOMER_NOT_FOUND);
+  }
+
+  return HttpResponse.ok(data);
+};
+
+export const createCustomer = async (customer: Prisma.CustomerCreateInput) => {
   if (!customer.name || !customer.email) {
     return HttpResponse.badRequest(HttpResponse.Messages.INVALID_CUSTOMER);
   }
