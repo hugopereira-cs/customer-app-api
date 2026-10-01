@@ -26,3 +26,16 @@ export const insertCustomer = async (
 
   return customer;
 };
+
+export const updateEmailByid = async (id: string, email: string) => {
+  const customer = await prismaClient.customer.update({
+    where: {
+      id: id,
+    },
+    data: {
+      email: email,
+    },
+  });
+
+  return customer;
+};

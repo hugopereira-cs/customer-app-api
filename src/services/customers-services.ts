@@ -35,3 +35,17 @@ export const createCustomer = async (customer: Prisma.CustomerCreateInput) => {
 
   return result;
 };
+
+export const updateEmailByIdService = async (id: string, email: string) => {
+  if (!/^[0-9a-fA-F]{24}$/.test(id)) {
+    return HttpResponse.badRequest(HttpResponse.Messages.INVALID_ID);
+  }
+  
+  if (!email) {
+    return HttpResponse.badRequest(HttpResponse.Messages.INVALID_EMAIL)
+  }
+
+  await CustomerRepository.updateEmailByid(id, email);
+
+  return HttpResponse.ok(HttpResponse.Messages.CUSTOMER_UPDATED);
+};

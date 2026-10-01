@@ -19,6 +19,7 @@ export const Messages = {
   CUSTOMER_NOT_FOUND: "Customer not found",
   CUSTOMER_UPDATED: "Customer updated successfully",
   ID_EXISTS: "This ID already exists. Please choose a different ID.",
+  INVALID_EMAIL: "Invalid email address",
 } as const;
 
 export const ok = async (data: unknown): Promise<HttpResponse> => ({
