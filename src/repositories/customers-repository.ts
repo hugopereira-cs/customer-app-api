@@ -39,3 +39,13 @@ export const updateEmailByid = async (id: string, email: string) => {
 
   return customer;
 };
+
+export const deleteCustomerById = async (id: string) => {
+  const result = await prismaClient.customer.delete({
+    where:{
+      id: id,
+    },
+  });
+
+  return result;
+}

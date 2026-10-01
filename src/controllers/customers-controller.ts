@@ -22,7 +22,7 @@ export const postCustomer = async (req: Request, res: Response) => {
   const bodyValue = req.body;
   const httpResponse = await Service.createCustomer(bodyValue);
 
-  return res.status(HttpStatus.OK).json(httpResponse);
+  res.status(HttpStatus.OK).json(httpResponse);
 };
 
 export const updateEmailById = async (
@@ -31,7 +31,17 @@ export const updateEmailById = async (
 ) => {
   const id = req.params.id;
   const newEmail: string = req.body.email;
-  const HttpStatus = await Service.updateEmailByIdService(id, newEmail);
+  const httpResponse = await Service.updateEmailByIdService(id, newEmail);
 
-  res.status(HttpStatus.statusCode).json(HttpStatus.body);
+  res.status(httpResponse.statusCode).json(httpResponse.body);
+};
+
+export const deleteCustomerById = async (
+  req: Request<{ id: string }>,
+  res: Response
+) => {
+  const id = req.params.id;
+  const httpResponse = await Service.deleteCustomerByIdService(id);
+
+  res.status(httpResponse.statusCode).json(httpResponse.body);
 };

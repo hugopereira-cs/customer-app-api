@@ -1,5 +1,4 @@
-import type { Prisma } from "@prisma/client";
-import prismaClient from "../prisma";
+import { Prisma } from "@prisma/client";
 import * as CustomerRepository from "../repositories/customers-repository";
 import * as HttpResponse from "../utils/http-helper";
 
@@ -40,12 +39,33 @@ export const updateEmailByIdService = async (id: string, email: string) => {
   if (!/^[0-9a-fA-F]{24}$/.test(id)) {
     return HttpResponse.badRequest(HttpResponse.Messages.INVALID_ID);
   }
-  
+
   if (!email) {
-    return HttpResponse.badRequest(HttpResponse.Messages.INVALID_EMAIL)
+    return HttpResponse.badRequest(HttpResponse.Messages.INVALID_EMAIL);
   }
 
   await CustomerRepository.updateEmailByid(id, email);
 
   return HttpResponse.ok(HttpResponse.Messages.CUSTOMER_UPDATED);
+};
+
+export const deleteCustomerByIdService = async (id: string) => {
+  if (!/^[0-9a-fA-F]{24}$/.test(id)) {
+    return HttpResponse.badRequest(HttpResponse.Messages.INVALID_ID);
+  }
+
+  try {
+    await CustomerRepository.deleteCustomerById(id);
+    return HttpResponse.ok(HttpResponse.Messages.CUSTOMER_DELETED);
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
+      return HttpResponse.notFound(HttpResponse.Messages.CUSTOMER_NOT_FOUND);
+    }
+    
+    throw error;
+  }
+
 };
