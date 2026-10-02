@@ -15,7 +15,7 @@ export const getCustomerByIdService = async (id: string) => {
 
   try {
     const customer = await CustomerRepository.findCustomerById(id);
-    
+
     return HttpResponse.ok(customer);
   } catch (error) {
     if (
@@ -47,13 +47,24 @@ export const updateEmailByIdService = async (id: string, email: string) => {
     return HttpResponse.badRequest(HttpResponse.Messages.INVALID_ID);
   }
 
-  if (!email) {
-    return HttpResponse.badRequest(HttpResponse.Messages.INVALID_EMAIL);
+  try {
+    if (!email) {
+      return HttpResponse.badRequest(HttpResponse.Messages.INVALID_EMAIL);
+    }
+
+    await CustomerRepository.updateEmailByid(id, email);
+
+    return HttpResponse.ok(HttpResponse.Messages.CUSTOMER_UPDATED);
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
+      return HttpResponse.notFound(HttpResponse.Messages.INVALID_ID);
+    }
+
+    throw error;
   }
-
-  await CustomerRepository.updateEmailByid(id, email);
-
-  return HttpResponse.ok(HttpResponse.Messages.CUSTOMER_UPDATED);
 };
 
 export const deleteCustomerByIdService = async (id: string) => {
@@ -63,6 +74,7 @@ export const deleteCustomerByIdService = async (id: string) => {
 
   try {
     await CustomerRepository.deleteCustomerById(id);
+    
     return HttpResponse.ok(HttpResponse.Messages.CUSTOMER_DELETED);
   } catch (error) {
     if (
