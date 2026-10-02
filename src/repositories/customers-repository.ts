@@ -1,5 +1,5 @@
 import prismaClient from "../prisma";
-import type { Customer, Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 
 export const findAllCustomers = async () => {
   const customers = await prismaClient.customer.findMany();
@@ -8,13 +8,13 @@ export const findAllCustomers = async () => {
 };
 
 export const findCustomerById = async (id: string) => {
-  const result = await prismaClient.customer.findFirst({
+  const customer = await prismaClient.customer.findFirstOrThrow({
     where: {
       id: id,
     },
   });
 
-  return result;
+  return customer;
 };
 
 export const insertCustomer = async (

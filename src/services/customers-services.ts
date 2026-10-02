@@ -13,13 +13,20 @@ export const getCustomerByIdService = async (id: string) => {
     return HttpResponse.badRequest(HttpResponse.Messages.INVALID_ID);
   }
 
-  const data = await CustomerRepository.findCustomerById(id);
+  try {
+    const customer = await CustomerRepository.findCustomerById(id);
+    
+    return HttpResponse.ok(customer);
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
+      return HttpResponse.notFound(HttpResponse.Messages.CUSTOMER_NOT_FOUND);
+    }
 
-  if (!data) {
-    return HttpResponse.notFound(HttpResponse.Messages.CUSTOMER_NOT_FOUND);
+    throw error;
   }
-
-  return HttpResponse.ok(data);
 };
 
 export const createCustomer = async (customer: Prisma.CustomerCreateInput) => {
@@ -64,8 +71,7 @@ export const deleteCustomerByIdService = async (id: string) => {
     ) {
       return HttpResponse.notFound(HttpResponse.Messages.CUSTOMER_NOT_FOUND);
     }
-    
+
     throw error;
   }
-
 };
